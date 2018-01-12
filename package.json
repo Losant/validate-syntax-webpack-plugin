@@ -1,0 +1,26 @@
+{
+  "name": "validate-syntax-webpack-plugin",
+  "version": "0.1.0",
+  "description": "A Webpack plugin to validate the syntax in your bundles",
+  "main": "index.js",
+  "repository": "https://github.com/Losant/validate-syntax-webpack-plugin.git",
+  "author": "Losant IoT <hello@losant.com>",
+  "license": "MIT",
+  "dependencies": {
+    "acorn": "^5.3.0",
+    "source-map": "^0.6.1"
+  },
+  "devDependencies": {
+    "@losant/eslint-config-losant": "^1.2.5"
+  },
+  "peerDependencies": {
+    "webpack": "^2.0.0 || ^3.0.0"
+  },
+  "eslintConfig": {
+    "extends": "@losant/eslint-config-losant/env/node",
+    "rules": {
+      "arrow-body-style": 0,
+      "valid-jsdoc": 0
+    }
+  }
+}
