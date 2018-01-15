@@ -1,0 +1,6 @@
+# Source code
+src
+
+# Config files
+.babelrc.js
+.eslintrc.js

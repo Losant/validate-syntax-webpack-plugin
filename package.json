@@ -6,21 +6,33 @@
   "repository": "https://github.com/Losant/validate-syntax-webpack-plugin.git",
   "author": "Losant IoT <hello@losant.com>",
   "license": "MIT",
+  "engines": {
+    "node": ">= 6.4.0"
+  },
+  "scripts": {
+    "build": "babel src --out-dir lib",
+    "push-with-tags": "git push && git push --tags",
+    "prepublish": "in-publish && yarn build || not-in-publish",
+    "postpublish": "in-publish && yarn push-with-tags || not-in-publish",
+    "postversion": "not-in-publish && yarn push-with-tags || in-publish"
+  },
   "dependencies": {
     "acorn": "^5.3.0",
+    "ramda": "^0.25.0",
     "source-map": "^0.6.1"
   },
   "devDependencies": {
-    "@losant/eslint-config-losant": "^1.2.5"
+    "@losant/eslint-config-losant": "^1.2.5",
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.0",
+    "babel-eslint": "^8.2.1",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-flow": "^6.23.0",
+    "flow-bin": "^0.63.1",
+    "flow-typed": "^2.2.3",
+    "in-publish": "^2.0.0"
   },
   "peerDependencies": {
     "webpack": "^2.0.0 || ^3.0.0"
-  },
-  "eslintConfig": {
-    "extends": "@losant/eslint-config-losant/env/node",
-    "rules": {
-      "arrow-body-style": 0,
-      "valid-jsdoc": 0
-    }
   }
 }
