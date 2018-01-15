@@ -23,7 +23,7 @@ import {
   cond,
   when,
   always,
-  construct,
+  constructN,
 } from 'ramda';
 
 import type {
@@ -77,7 +77,7 @@ export const extractFileSourceAndMap = cond([
     pipe(
       invoker(0, 'sourceAndMap'),
       evolve({
-        map: construct(SourceMapConsumer),
+        map: constructN(1, SourceMapConsumer),
       }),
     ),
   ],
