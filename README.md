@@ -44,4 +44,9 @@ module.exports = {
 
 The plugin currently takes the following options:
 
-- `ecmaVersion`
+|Name|Type|Default|Description|
+|:--:|:--:|:-----:|:----------|
+|**`ecmaVersion`**|`number`|`5`|The ECMAScript version to validate against|
+|**`sourceType`**|`string`|`"script"`|Set to `"module"` if you're compiling to ES modules instead of CommonJS|
+|**`include`**|`string \| RegExp`|`/\\.js$/i`|Files to include when validating|
+|**`exclude`**|`string \| RegExp`|`null`|Files to exclude when validating|
