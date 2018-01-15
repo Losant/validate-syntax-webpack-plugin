@@ -13,7 +13,7 @@
     "node": ">= 6.4.0"
   },
   "scripts": {
-    "build": "babel src --out-dir lib",
+    "build": "rm -rf lib/* && babel src --out-dir lib",
     "push-with-tags": "git push && git push --tags",
     "prepublish": "in-publish && yarn build || not-in-publish",
     "postpublish": "in-publish && yarn push-with-tags || not-in-publish",
