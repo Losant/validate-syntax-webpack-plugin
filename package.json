@@ -2,18 +2,19 @@
   "name": "validate-syntax-webpack-plugin",
   "version": "0.2.0",
   "description": "A Webpack plugin to validate the syntax in your bundles",
-  "main": "lib/index.js",
-  "files": [
-    "lib/**/*.js"
-  ],
   "repository": "https://github.com/Losant/validate-syntax-webpack-plugin.git",
   "author": "Losant IoT <hello@losant.com>",
   "license": "MIT",
   "engines": {
     "node": ">= 6.4.0"
   },
+  "main": "lib/index.js",
+  "files": [
+    "lib/**/*.js"
+  ],
   "scripts": {
     "build": "rm -rf lib/* && babel src --out-dir lib --ignore types.js --no-comments",
+    "lint": "esw src *.js",
     "prepublish": "in-publish && yarn build || not-in-publish",
     "postversion": "git push && git push --tags"
   },

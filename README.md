@@ -15,7 +15,8 @@ bundle but we couldn't find a plugin to do that, so we created one.
 
 ## Requirements
 
-- Webpack version 2 or 3.
+- Node >= 6.4.0
+- Webpack 2 or 3
 
 ## Install
 
