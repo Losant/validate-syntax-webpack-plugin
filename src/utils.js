@@ -6,6 +6,7 @@ import {
   __,
   T,
   is,
+  isEmpty,
   pipe,
   flip,
   curry,
@@ -19,6 +20,7 @@ import {
   all,
   map,
   filter,
+  reject,
   reduce,
   adjust,
   evolve,
@@ -26,7 +28,7 @@ import {
   cond,
   when,
   unless,
-  allPass,
+  always,
   constructN,
 } from 'ramda';
 
@@ -45,16 +47,16 @@ const toRegExp = when(is(String), pipe(
   RegExp,
 ));
 
-const matchPart = curry((testPattern, val) => {
-  if (!testPattern) {
-    return true;
+const testMultiple = curry((patterns, val) => {
+  if (!patterns || isEmpty(patterns)) {
+    return val;
   }
 
   return pipe(
     unless(is(Array), Array.of),
     map(toRegExp),
-    all(test(__, val))
-  )(testPattern);
+    all(test(__, val)),
+  )(patterns);
 });
 
 const chunkFilesReducer = pipe(
@@ -86,12 +88,17 @@ export const extractMatchingFileNames = (args: ExtractMatchingFileNamesArgs) => 
   return pipe(
     reduce(chunkFilesReducer, []),
     concat(additionalChunkAssets || []),
-    filter(
-      allPass([
-        matchPart(testPattern),
-        matchPart(includePattern),
-        matchPart(excludePattern),
-      ])
+    when(
+      always(testPattern),
+      filter(testMultiple(testPattern)),
+    ),
+    when(
+      always(includePattern),
+      filter(testMultiple(includePattern)),
+    ),
+    when(
+      always(excludePattern),
+      reject(testMultiple(excludePattern)),
     ),
   )(chunks);
 };
