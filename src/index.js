@@ -1,11 +1,11 @@
 // @flow
 
-import { merge } from 'ramda';
-
 /* eslint-disable require-path-exists/exists */
 // $FlowIgnore
 import RequestShortener from 'webpack/lib/RequestShortener';
 /* eslint-enable require-path-exists/exists */
+
+import { merge } from 'ramda';
 
 import {
   parseFileSyntax,
