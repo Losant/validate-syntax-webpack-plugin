@@ -1,6 +1,6 @@
 {
   "name": "validate-syntax-webpack-plugin",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A Webpack plugin to validate the syntax in your bundles",
   "main": "lib/index.js",
   "files": [
