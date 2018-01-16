@@ -1,6 +1,6 @@
 {
   "name": "validate-syntax-webpack-plugin",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "A Webpack plugin to validate the syntax in your bundles",
   "repository": "https://github.com/Losant/validate-syntax-webpack-plugin.git",
   "author": "Losant IoT <hello@losant.com>",
