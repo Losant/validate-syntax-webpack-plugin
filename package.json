@@ -14,10 +14,8 @@
   },
   "scripts": {
     "build": "rm -rf lib/* && babel src --out-dir lib --ignore types.js --no-comments",
-    "push-with-tags": "git push && git push --tags",
     "prepublish": "in-publish && yarn build || not-in-publish",
-    "postpublish": "in-publish && yarn push-with-tags || not-in-publish",
-    "postversion": "not-in-publish && yarn push-with-tags || in-publish"
+    "postversion": "git push && git push --tags"
   },
   "dependencies": {
     "acorn": "^5.3.0",
