@@ -13,7 +13,7 @@
     "node": ">= 6.4.0"
   },
   "scripts": {
-    "build": "rm -rf lib/* && babel src --out-dir lib",
+    "build": "rm -rf lib/* && babel src --out-dir lib --ignore types.js --no-comments",
     "push-with-tags": "git push && git push --tags",
     "prepublish": "in-publish && yarn build || not-in-publish",
     "postpublish": "in-publish && yarn push-with-tags || not-in-publish",
@@ -26,6 +26,7 @@
   },
   "devDependencies": {
     "@losant/eslint-config-losant": "^1.2.5",
+    "@losant/scripts": "^1.0.10",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
     "babel-eslint": "^8.2.1",

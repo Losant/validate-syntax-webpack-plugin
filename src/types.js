@@ -10,11 +10,27 @@ type SourceType =
   | 'script'
   | 'module';
 
-export type MatchPattern = string | RegExp;
+export type MatchPattern =
+  | string
+  | RegExp
+  | Array<string | RegExp>;
+
+export type $SourceMapConsumer = {
+  originalPositionFor: (args: { line: number, column: number }) => {
+    source: string,
+    line: number,
+    column: number,
+  },
+};
+
+export type $RequestShortener = {
+  shorten: (source: string) => string,
+};
 
 export type ValidateSyntaxWebpackPluginOptions = {
   ecmaVersion: EcmaVersion,
   sourceType: SourceType,
+  test?: ?MatchPattern,
   include?: ?MatchPattern,
   exclude?: ?MatchPattern,
 };

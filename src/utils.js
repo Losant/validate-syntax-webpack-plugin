@@ -3,35 +3,59 @@
 import { parse } from 'acorn';
 import { SourceMapConsumer } from 'source-map';
 import {
+  __,
   T,
   is,
   pipe,
   flip,
+  curry,
   propOr,
   propSatisfies,
   apply,
   invoker,
-  concat,
-  replace,
   test,
+  replace,
+  concat,
+  all,
+  map,
   filter,
-  reject,
   reduce,
   adjust,
   evolve,
   objOf,
   cond,
   when,
-  always,
+  unless,
+  allPass,
   constructN,
 } from 'ramda';
 
 import type {
-  WebpackChunk,
   MatchPattern,
+  WebpackChunk,
+  $RequestShortener,
+  $SourceMapConsumer,
 } from './types';
 
+const REGEX_CHARS_REGEX = /[-[\]{}()*+?.,\\^$|#\s]/g;
 const ERROR_SOURCE_INFO_REGEX = /\(([0-9]+):([0-9]+)\)$/;
+
+const toRegExp = when(is(String), pipe(
+  replace(REGEX_CHARS_REGEX, '\\$&'),
+  RegExp,
+));
+
+const matchPart = curry((testPattern, val) => {
+  if (!testPattern) {
+    return true;
+  }
+
+  return pipe(
+    unless(is(Array), Array.of),
+    map(toRegExp),
+    all(test(__, val))
+  )(testPattern);
+});
 
 const chunkFilesReducer = pipe(
   Array.of,
@@ -45,6 +69,7 @@ export const parseFileSyntax = flip(parse);
 type ExtractMatchingFileNamesArgs = {
   chunks: Array<WebpackChunk>,
   additionalChunkAssets: Array<String>,
+  test: ?MatchPattern,
   include: ?MatchPattern,
   exclude: ?MatchPattern,
 };
@@ -53,20 +78,20 @@ export const extractMatchingFileNames = (args: ExtractMatchingFileNamesArgs) => 
   const {
     chunks,
     additionalChunkAssets,
-    include,
-    exclude,
+    test: testPattern,
+    include: includePattern,
+    exclude: excludePattern,
   } = args;
 
   return pipe(
     reduce(chunkFilesReducer, []),
     concat(additionalChunkAssets || []),
-    when(
-      always(include),
-      filter(test(include)),
-    ),
-    when(
-      always(exclude),
-      reject(test(exclude)),
+    filter(
+      allPass([
+        matchPart(testPattern),
+        matchPart(includePattern),
+        matchPart(excludePattern),
+      ])
     ),
   )(chunks);
 };
@@ -93,19 +118,11 @@ export const extractFileSourceAndMap = cond([
 type BuildErrorArgs = {
   error: Error,
   file: string,
-  map: ?{
-    originalPositionFor: ({ line: number, column: number }) => {
-      source: string,
-      line: number,
-      column: number,
-    },
-  },
-  requestShortener: {
-    shorten: (source: string) => string,
-  },
+  map: ?$SourceMapConsumer,
+  requestShortener: $RequestShortener,
 };
 
-export const buildError = (args: BuildErrorArgs) => {
+export const buildError = (args: BuildErrorArgs): Error => {
   const { error, file, map, requestShortener } = args;
 
   const baseErrorMessage = pipe(
@@ -125,8 +142,8 @@ export const buildError = (args: BuildErrorArgs) => {
     const { source, line, column } = original;
     const sourcePath = requestShortener.shorten(source);
 
-    return new Error(`${baseErrorMessage} [${sourcePath}:${line},${column}]`);
+    return new Error(`${baseErrorMessage} [${sourcePath} ${line}:${column}]`);
   }
 
-  return new Error(baseErrorMessage);
+  return new Error(`${baseErrorMessage} [${errorLine}:${errorColumn}]`);
 };

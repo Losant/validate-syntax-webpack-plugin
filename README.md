@@ -1,6 +1,7 @@
 # Validate Syntax Webpack Plugin
 
-A Webpack plugin to validate the syntax in your bundles
+A Webpack plugin to validate the syntax in your bundles. Uses
+[Acorn](https://github.com/acornjs/acorn) internally.
 
 ## Why?
 
@@ -9,8 +10,8 @@ React app where some ES6 code was making its way into the app bundle, which
 broke the site in Internet Explorer. Upon investigation we discovered that the
 code in question was coming from one of the third-party packages we were using
 that was written in ES6 but was not transpiled before shipping. We wanted our
-build process to throw and error if any invalid code was found in the compiled
-bundle but we couldn't find a plugin to do this, so we created one.
+build process to throw an error if any invalid code makes it into the compiled
+bundle but we couldn't find a plugin to do that, so we created one.
 
 ## Requirements
 
@@ -48,5 +49,6 @@ The plugin currently takes the following options:
 |:--:|:--:|:-----:|:----------|
 |**`ecmaVersion`**|`number`|`5`|The ECMAScript version to validate against|
 |**`sourceType`**|`string`|`"script"`|Set to `"module"` if you're compiling to ES modules instead of CommonJS|
-|**`include`**|`string \| RegExp`|`/\\.js$/i`|Files to include when validating|
-|**`exclude`**|`string \| RegExp`|`null`|Files to exclude when validating|
+|**`test`**|`RegExp \| Array<RegExp>`|`/\\.js$/i`|Test to match files against|
+|**`include`**|`RegExp \| Array<RegExp>`|`null`|Files to include|
+|**`exclude`**|`RegExp \| Array<RegExp>`|`null`|Files to exclude|

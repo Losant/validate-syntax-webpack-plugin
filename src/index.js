@@ -7,11 +7,6 @@ import { merge } from 'ramda';
 import RequestShortener from 'webpack/lib/RequestShortener';
 /* eslint-enable require-path-exists/exists */
 
-import type {
-  WebpackCompiler,
-  ValidateSyntaxWebpackPluginOptions,
-} from './types';
-
 import {
   parseFileSyntax,
   extractMatchingFileNames,
@@ -19,12 +14,18 @@ import {
   buildError,
 } from './utils';
 
+import type {
+  WebpackCompiler,
+  ValidateSyntaxWebpackPluginOptions,
+} from './types';
+
 const JS_FILE_REGEX = /\.js$/i;
 
 const defaultOptions = {
   ecmaVersion: 5,
   sourceType: 'script',
-  include: JS_FILE_REGEX,
+  test: JS_FILE_REGEX,
+  include: null,
   exclude: null,
 };
 
@@ -39,6 +40,7 @@ class ValidateSyntaxWebpackPlugin {
     const {
       ecmaVersion,
       sourceType,
+      test,
       include,
       exclude,
     } = this.options;
@@ -53,6 +55,7 @@ class ValidateSyntaxWebpackPlugin {
         const files = extractMatchingFileNames({
           chunks,
           additionalChunkAssets,
+          test,
           include,
           exclude,
         });
