@@ -11,7 +11,7 @@ import {
   flip,
   curry,
   propOr,
-  propSatisfies,
+  propIs,
   apply,
   invoker,
   test,
@@ -104,22 +104,16 @@ export const extractMatchingFileNames = (args: ExtractMatchingFileNamesArgs) => 
 };
 
 export const extractFileSourceAndMap = cond([
-  [
-    propSatisfies(is(Function), 'sourceAndMap'),
-    pipe(
-      invoker(0, 'sourceAndMap'),
-      evolve({
-        map: constructN(1, SourceMapConsumer),
-      }),
-    ),
-  ],
-  [
-    T,
-    pipe(
-      invoker(0, 'source'),
-      objOf('source'),
-    ),
-  ],
+  [propIs(Function, 'sourceAndMap'), pipe(
+    invoker(0, 'sourceAndMap'),
+    evolve({
+      map: constructN(1, SourceMapConsumer),
+    }),
+  )],
+  [T, pipe(
+    invoker(0, 'source'),
+    objOf('source'),
+  )],
 ]);
 
 type BuildErrorArgs = {
